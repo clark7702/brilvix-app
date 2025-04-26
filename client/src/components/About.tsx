@@ -7,7 +7,7 @@ const teamMembers = [
     title: "Founder & Creative Director"
   },
   {
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1534308143481-c55f00be8bd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     name: "Liam Tremblay",
     title: "Technical Director"
   },

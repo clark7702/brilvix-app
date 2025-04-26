@@ -5,10 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
-import { MapPin, Mail, Phone, Instagram, Twitter, Linkedin, Facebook, Copy, Check } from "lucide-react";
+import { MapPin, Mail, Phone } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -31,9 +29,6 @@ type ContactFormValues = z.infer<typeof contactFormSchema>;
 
 export default function Contact() {
   const { toast } = useToast();
-  const [formData, setFormData] = useState<ContactFormValues | null>(null);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
   
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -62,46 +57,18 @@ export default function Contact() {
         description: error.message || "There was an error sending your message. Please try again.",
         variant: "destructive",
       });
-      setDialogOpen(true);
     }
   });
 
   const onSubmit = (data: ContactFormValues) => {
-    setFormData(data);
-    
     // Send the data to the server
     mutation.mutate(data);
     
-    // Also show the dialog as a backup
-    setDialogOpen(true);
-  };
-  
-  const copyToClipboard = () => {
-    if (!formData) return;
-    
-    const emailContent = `
-Name: ${formData.name}
-Email: ${formData.email}
-Subject: ${formData.subject || "No subject"}
-Message: ${formData.message}
-    `.trim();
-    
-    navigator.clipboard.writeText(emailContent).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-      
-      toast({
-        title: "Copied!",
-        description: "Message details copied to clipboard",
-      });
+    // Show toast for better feedback while waiting
+    toast({
+      title: "Sending message...",
+      description: "Your message is being processed.",
     });
-  };
-  
-  const closeDialog = () => {
-    setDialogOpen(false);
-    if (!mutation.isPending) {
-      reset();
-    }
   };
 
   return (
@@ -150,21 +117,7 @@ Message: ${formData.message}
                 </div>
               </div>
             </div>
-            
-            <div className="flex space-x-4">
-              <a href="#" className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors">
-                <Linkedin className="h-5 w-5" />
-              </a>
-              <a href="#" className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary/90 transition-colors">
-                <Facebook className="h-5 w-5" />
-              </a>
-            </div>
+
           </motion.div>
           
           <motion.div
@@ -233,8 +186,9 @@ Message: ${formData.message}
                   <Button 
                     type="submit" 
                     className="w-full"
+                    disabled={mutation.isPending}
                   >
-                    Send Message
+                    {mutation.isPending ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </CardContent>
@@ -242,46 +196,6 @@ Message: ${formData.message}
           </motion.div>
         </div>
       </div>
-
-      {/* Dialog for showing form content */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Contact Details</DialogTitle>
-            <DialogDescription>
-              Your message has been prepared to send to contact@brilix.com
-            </DialogDescription>
-          </DialogHeader>
-          
-          {formData && (
-            <div className="p-4 bg-gray-50 rounded-md space-y-2 text-sm">
-              <div><strong>Name:</strong> {formData.name}</div>
-              <div><strong>Email:</strong> {formData.email}</div>
-              <div><strong>Subject:</strong> {formData.subject || "No subject"}</div>
-              <div><strong>Message:</strong> {formData.message}</div>
-            </div>
-          )}
-          
-          <DialogFooter className="flex sm:justify-between">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={closeDialog}
-            >
-              Close
-            </Button>
-            <Button
-              type="button"
-              variant="default"
-              className="flex items-center gap-2"
-              onClick={copyToClipboard}
-            >
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              {copied ? "Copied" : "Copy to Clipboard"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </section>
   );
 }
