@@ -81,23 +81,39 @@ export default function Hero() {
           <p className="text-center text-gray-500 mb-10">Trusted by innovative companies across Canada</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
             <div className="flex justify-center">
-              <div className="h-10 text-gray-400 hover:text-gray-700 transition-colors">
-                <div className="text-center font-semibold">COMPANY ONE</div>
+              <div className="h-12 flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Shopify_logo.svg" 
+                  alt="Shopify" 
+                  className="h-6 md:h-8 opacity-70 hover:opacity-100 transition-opacity"
+                />
               </div>
             </div>
             <div className="flex justify-center">
-              <div className="h-10 text-gray-400 hover:text-gray-700 transition-colors">
-                <div className="text-center font-semibold">COMPANY TWO</div>
+              <div className="h-12 flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/f/fd/Hootsuite_logo.svg" 
+                  alt="Hootsuite" 
+                  className="h-6 md:h-8 opacity-70 hover:opacity-100 transition-opacity"
+                />
               </div>
             </div>
             <div className="flex justify-center">
-              <div className="h-10 text-gray-400 hover:text-gray-700 transition-colors">
-                <div className="text-center font-semibold">COMPANY THREE</div>
+              <div className="h-12 flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Wealthsimple_logo.svg" 
+                  alt="Wealthsimple" 
+                  className="h-6 md:h-8 opacity-70 hover:opacity-100 transition-opacity"
+                />
               </div>
             </div>
             <div className="flex justify-center">
-              <div className="h-10 text-gray-400 hover:text-gray-700 transition-colors">
-                <div className="text-center font-semibold">COMPANY FOUR</div>
+              <div className="h-12 flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/9/9d/Lululemon_Athletica_logo.svg" 
+                  alt="Lululemon" 
+                  className="h-6 md:h-8 opacity-70 hover:opacity-100 transition-opacity"
+                />
               </div>
             </div>
           </div>
