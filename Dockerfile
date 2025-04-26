@@ -24,8 +24,8 @@ WORKDIR /app
 COPY --from=builder /app/package.json /app/package-lock.json* ./
 COPY --from=builder /app/dist ./dist
 
-# Install only production dependencies
-RUN npm install --production
+# Install dependencies
+RUN npm install 
 
 # Expose the application's port
 EXPOSE 5000
