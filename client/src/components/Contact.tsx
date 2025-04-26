@@ -11,6 +11,8 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 const contactFormSchema = z.object({
   name: z.string().min(2, {
@@ -43,15 +45,35 @@ export default function Contact() {
     }
   });
 
+  const mutation = useMutation({
+    mutationFn: (data: ContactFormValues) => {
+      return apiRequest('POST', '/api/contact', data);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Message sent!",
+        description: "Thank you for reaching out. We'll get back to you soon.",
+      });
+      reset();
+    },
+    onError: (error) => {
+      toast({
+        title: "Failed to send message",
+        description: error.message || "There was an error sending your message. Please try again.",
+        variant: "destructive",
+      });
+      setDialogOpen(true);
+    }
+  });
+
   const onSubmit = (data: ContactFormValues) => {
     setFormData(data);
-    setDialogOpen(true);
     
-    // Show success toast
-    toast({
-      title: "Form submitted!",
-      description: "Your message has been prepared for sending to contact@brilix.com",
-    });
+    // Send the data to the server
+    mutation.mutate(data);
+    
+    // Also show the dialog as a backup
+    setDialogOpen(true);
   };
   
   const copyToClipboard = () => {
@@ -77,7 +99,9 @@ Message: ${formData.message}
   
   const closeDialog = () => {
     setDialogOpen(false);
-    reset();
+    if (!mutation.isPending) {
+      reset();
+    }
   };
 
   return (

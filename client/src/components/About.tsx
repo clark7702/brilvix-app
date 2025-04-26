@@ -2,24 +2,24 @@ import { motion } from "framer-motion";
 
 const teamMembers = [
   {
-    image: "https://images.unsplash.com/photo-1580518380430-2f84c0a7fb85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    name: "Sarah Johnson",
-    title: "Creative Director"
+    image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    name: "Olivia MacKenzie",
+    title: "Founder & Creative Director"
   },
   {
-    image: "https://images.unsplash.com/photo-1531891570158-e71b35a485bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    name: "Michael Chen",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    name: "Liam Tremblay",
     title: "Technical Director"
   },
   {
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    name: "Emma Rodriguez",
-    title: "Marketing Strategist"
+    image: "https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    name: "Sophie Bouchard",
+    title: "Head of Strategy"
   },
   {
-    image: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    name: "David Thompson",
-    title: "Client Relations"
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    name: "Noah Singh",
+    title: "Director of Client Success"
   }
 ];
 

@@ -2,10 +2,24 @@ import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertMessageSchema } from "@shared/schema";
+import { sendEmail, initEmailTransporter } from "./emailService";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // put application routes here
   // prefix all routes with /api
+
+  // Initialize email transporter if credentials are available
+  if (process.env.EMAIL_HOST && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    initEmailTransporter({
+      host: process.env.EMAIL_HOST,
+      port: parseInt(process.env.EMAIL_PORT || '587'),
+      secure: process.env.EMAIL_SECURE === 'true',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+  }
 
   app.post("/api/contact", async (req: Request, res: Response) => {
     try {
@@ -14,6 +28,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Save the message
       const message = await storage.createMessage(validatedData);
+      
+      // Send email if transporter is initialized
+      if (process.env.EMAIL_HOST && process.env.EMAIL_USER) {
+        const emailContent = `
+          <h2>New Contact Form Submission</h2>
+          <p><strong>Name:</strong> ${validatedData.name}</p>
+          <p><strong>Email:</strong> ${validatedData.email}</p>
+          <p><strong>Subject:</strong> ${validatedData.subject || 'No subject'}</p>
+          <p><strong>Message:</strong></p>
+          <p>${validatedData.message}</p>
+        `;
+        
+        const emailSent = await sendEmail({
+          to: 'contact@brilix.com',
+          subject: `Contact Form: ${validatedData.subject || 'New message'}`,
+          text: `Name: ${validatedData.name}\nEmail: ${validatedData.email}\nSubject: ${validatedData.subject || 'No subject'}\nMessage: ${validatedData.message}`,
+          html: emailContent
+        });
+        
+        if (!emailSent) {
+          console.warn('Failed to send email notification');
+        }
+      }
       
       // Return success response
       res.status(201).json({ 
