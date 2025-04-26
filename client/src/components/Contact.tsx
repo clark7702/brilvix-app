@@ -44,31 +44,52 @@ export default function Contact() {
     mutationFn: (data: ContactFormValues) => {
       return apiRequest('POST', '/api/contact', data);
     },
-    onSuccess: () => {
-      toast({
-        title: "Message sent!",
-        description: "Thank you for reaching out. We'll get back to you soon.",
-      });
+    onSuccess: (response) => {
+      // Check if email was sent successfully
+      if (response.emailSent) {
+        toast({
+          title: "Message sent successfully!",
+          description: "Thank you for reaching out. We'll get back to you soon.",
+        });
+      } else {
+        // Email saved but not sent
+        toast({
+          title: "Message received",
+          description: "Your message was saved but there was an issue sending an email notification. We'll still process your request.",
+          variant: "default",
+        });
+        
+        // If there's a specific email error, show it in a separate toast
+        if (response.emailError) {
+          setTimeout(() => {
+            toast({
+              title: "Email delivery status",
+              description: `Note: ${response.emailError}`,
+              variant: "default",
+            });
+          }, 1000);
+        }
+      }
       reset();
     },
     onError: (error) => {
       toast({
         title: "Failed to send message",
-        description: error.message || "There was an error sending your message. Please try again.",
+        description: error.message || "There was an error submitting your message. Please try again.",
         variant: "destructive",
       });
     }
   });
 
   const onSubmit = (data: ContactFormValues) => {
-    // Send the data to the server
-    mutation.mutate(data);
-    
-    // Show toast for better feedback while waiting
+    // Show toast for immediate feedback
     toast({
       title: "Sending message...",
       description: "Your message is being processed.",
     });
+    
+    // Send the data to the server
+    mutation.mutate(data);
   };
 
   return (

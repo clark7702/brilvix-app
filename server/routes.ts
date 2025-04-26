@@ -30,6 +30,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const message = await storage.createMessage(validatedData);
       
       // Send email if transporter is initialized
+      let emailSent = false;
+      let emailError = null;
+      
       if (process.env.EMAIL_HOST && process.env.EMAIL_USER) {
         const emailContent = `
           <h2>New Contact Form Submission</h2>
@@ -40,22 +43,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
           <p>${validatedData.message}</p>
         `;
         
-        const emailSent = await sendEmail({
-          to: 'contact@brilix.com',
-          subject: `Contact Form: ${validatedData.subject || 'New message'}`,
-          text: `Name: ${validatedData.name}\nEmail: ${validatedData.email}\nSubject: ${validatedData.subject || 'No subject'}\nMessage: ${validatedData.message}`,
-          html: emailContent
-        });
-        
-        if (!emailSent) {
-          console.warn('Failed to send email notification');
+        try {
+          emailSent = await sendEmail({
+            to: 'contact@brilix.com',
+            subject: `Contact Form: ${validatedData.subject || 'New message'}`,
+            text: `Name: ${validatedData.name}\nEmail: ${validatedData.email}\nSubject: ${validatedData.subject || 'No subject'}\nMessage: ${validatedData.message}`,
+            html: emailContent
+          });
+          
+          if (!emailSent) {
+            console.warn('Failed to send email notification');
+            emailError = "Email delivery service couldn't process the request";
+          }
+        } catch (err) {
+          console.error('Error sending email:', err);
+          emailError = err instanceof Error ? err.message : "Unknown email error";
         }
+      } else {
+        emailError = "Email service not configured";
       }
       
-      // Return success response
+      // Return success response with email status
       res.status(201).json({ 
         success: true, 
         message: "Message received successfully",
+        emailSent: emailSent,
+        emailError: emailError,
         data: message
       });
     } catch (error) {
