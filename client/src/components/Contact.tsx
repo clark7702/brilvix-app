@@ -44,9 +44,9 @@ export default function Contact() {
     mutationFn: (data: ContactFormValues) => {
       return apiRequest('POST', '/api/contact', data);
     },
-    onSuccess: (response) => {
+    onSuccess: (response: any) => {
       // Check if email was sent successfully
-      if (response.emailSent) {
+      if (response && response.emailSent) {
         toast({
           title: "Message sent successfully!",
           description: "Thank you for reaching out. We'll get back to you soon.",
@@ -60,7 +60,7 @@ export default function Contact() {
         });
         
         // If there's a specific email error, show it in a separate toast
-        if (response.emailError) {
+        if (response && response.emailError) {
           setTimeout(() => {
             toast({
               title: "Email delivery status",
