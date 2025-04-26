@@ -1,46 +1,25 @@
 import { motion } from "framer-motion";
-import { Linkedin, Twitter, Mail } from "lucide-react";
 
 const teamMembers = [
   {
-    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1580518380430-2f84c0a7fb85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     name: "Sarah Johnson",
-    title: "Creative Director",
-    socials: {
-      linkedin: "#",
-      twitter: "#",
-      email: "#"
-    }
+    title: "Creative Director"
   },
   {
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1531891570158-e71b35a485bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     name: "Michael Chen",
-    title: "Technical Director",
-    socials: {
-      linkedin: "#",
-      twitter: "#",
-      email: "#"
-    }
+    title: "Technical Director"
   },
   {
-    image: "https://images.unsplash.com/photo-1574871786514-46828fd52a51?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     name: "Emma Rodriguez",
-    title: "Marketing Strategist",
-    socials: {
-      linkedin: "#",
-      twitter: "#",
-      email: "#"
-    }
+    title: "Marketing Strategist"
   },
   {
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "https://images.unsplash.com/photo-1542909168-82c3e7fdca5c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     name: "David Thompson",
-    title: "Client Relations",
-    socials: {
-      linkedin: "#",
-      twitter: "#",
-      email: "#"
-    }
+    title: "Client Relations"
   }
 ];
 
@@ -145,18 +124,7 @@ export default function About() {
               />
               <div className="p-6">
                 <h4 className="font-heading font-semibold text-lg mb-1">{member.name}</h4>
-                <p className="text-gray-600 text-sm mb-3">{member.title}</p>
-                <div className="flex space-x-3">
-                  <a href={member.socials.linkedin} className="text-gray-400 hover:text-primary transition-colors">
-                    <Linkedin className="h-5 w-5" />
-                  </a>
-                  <a href={member.socials.twitter} className="text-gray-400 hover:text-primary transition-colors">
-                    <Twitter className="h-5 w-5" />
-                  </a>
-                  <a href={member.socials.email} className="text-gray-400 hover:text-primary transition-colors">
-                    <Mail className="h-5 w-5" />
-                  </a>
-                </div>
+                <p className="text-gray-600 text-sm">{member.title}</p>
               </div>
             </motion.div>
           ))}
