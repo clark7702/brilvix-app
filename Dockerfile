@@ -1,23 +1,34 @@
-# Use Node 18 LTS
+# Stage 1: Build
+FROM node:18-slim AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files and install all dependencies
+COPY package.json package-lock.json* ./
+RUN npm install
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the application
+RUN npm run build
+
+# Stage 2: Production
 FROM node:18-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install production dependencies only
-COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
+# Copy only the necessary files from the builder stage
+COPY --from=builder /app/package.json /app/package-lock.json* ./
+COPY --from=builder /app/dist ./dist
 
-# Install ONLY production dependencies
+# Install only production dependencies
 RUN npm install --production
 
-# Copy source code
-COPY . .
-
-# Build the frontend
-RUN npm run build
-
-# Expose port (change if needed)
+# Expose the application's port
 EXPOSE 5000
 
-# Start the app
+# Define the command to run the application
 CMD ["node", "dist/index.js"]
