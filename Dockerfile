@@ -1,34 +1,23 @@
-# Stage 1: Build
-FROM node:18-alpine AS builder
+# Use Node 18 LTS
+FROM node:18-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-RUN npm install
+# Install production dependencies only
+COPY package.json package-lock.json* pnpm-lock.yaml* yarn.lock* ./
+
+# Install ONLY production dependencies
+RUN npm install --production
 
 # Copy source code
 COPY . .
 
-# Build the application
+# Build the frontend
 RUN npm run build
 
-# Stage 2: Production
-FROM node:18-alpine
+# Expose port (change if needed)
+EXPOSE 5000
 
-# Set working directory
-WORKDIR /app
-
-# Copy built files from the builder stage
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package*.json ./
-
-# Install only production dependencies
-RUN npm install --only=production
-
-# Expose the port your app runs on
-EXPOSE 3000
-
-# Start the application
+# Start the app
 CMD ["node", "dist/index.js"]
