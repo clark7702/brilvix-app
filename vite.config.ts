@@ -3,17 +3,8 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-
-const __dirname = dirname(__filename);
-
-console.log({
-  fileURLToPath,
-  __dirname
-
-})
-
+// Get the root directory using process.cwd()
+const rootDir = process.cwd();
 
 export default defineConfig({
   plugins: [
@@ -23,18 +14,17 @@ export default defineConfig({
     process.env.REPL_ID !== undefined
       ? [require("@replit/vite-plugin-cartographer").cartographer()]
       : []),
-    ,
   ],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "client", "src"),
-      "@shared": path.resolve(__dirname, "shared"),
-      "@assets": path.resolve(__dirname, "attached_assets"),
+      "@": path.resolve(rootDir, "client", "src"),
+      "@shared": path.resolve(rootDir, "shared"),
+      "@assets": path.resolve(rootDir, "attached_assets"),
     },
   },
-  root: path.resolve(__dirname, "client"),
+  root: path.resolve(rootDir, "client"),
   build: {
-    outDir: path.resolve(__dirname, "dist/public"),
+    outDir: path.resolve(rootDir, "dist/public"),
     emptyOutDir: true,
   },
 });

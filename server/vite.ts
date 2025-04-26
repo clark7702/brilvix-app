@@ -8,6 +8,9 @@ import { nanoid } from "nanoid";
 
 const viteLogger = createLogger();
 
+// Get the root directory using process.cwd()
+const rootDir = process.cwd();
+
 export function log(message: string, source = "express") {
   const formattedTime = new Date().toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -48,12 +51,7 @@ export async function setupVite(app: Express, server: Server) {
     const url = req.originalUrl;
 
     try {
-      const clientTemplate = path.resolve(
-        __dirname,
-        "..",
-        "client",
-        "index.html"
-      );
+      const clientTemplate = path.resolve(rootDir, "client", "index.html");
 
       // always reload the index.html file from disk incase it changes
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
@@ -71,7 +69,7 @@ export async function setupVite(app: Express, server: Server) {
 }
 
 export function serveStatic(app: Express) {
-  const distPath = path.resolve(__dirname, "public");
+  const distPath = path.resolve(rootDir, "dist", "public");
 
   if (!fs.existsSync(distPath)) {
     throw new Error(
